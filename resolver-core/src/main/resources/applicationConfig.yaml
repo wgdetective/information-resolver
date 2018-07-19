@@ -1,0 +1,20 @@
+youtube:
+    date.format: dd.MM.yyyy
+    delimeter:
+        field:
+            input: ;
+            output: \t
+        line: \n
+    link.prefix: https://www.youtube.com/watch?v=
+    api.key: AIzaSyCMc7-bH69ShDnLWQSnqWs16jVHvVGyReE
+
+kinopoisk:
+    date.format: dd.MM.yyyy
+    link:
+        scripts.timeout: 15
+        delimeter:
+            field:
+                input: ;
+                output: \t
+            line: \n
+        max.actors: 3
