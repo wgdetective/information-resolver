@@ -8,6 +8,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 
 import javax.crypto.AEADBadTagException;
@@ -30,23 +31,27 @@ public class AcmpTasksDataExtractor implements RemoteDataExtractor<AcmpTasksRequ
     @Override
     public List<AcmpTasksResponse> extract(final List<AcmpTasksRequest> requestList,
                                            final Map<String, Object> params) {
-        final WebDriver driver = new SafariDriver();
+        final WebDriver driver = new FirefoxDriver();
         final List<AcmpTasksResponse> result = new ArrayList<>(requestList.size());
         final List<Long> requiredTasks = (List<Long>) params.get(AcmpTasksConfig.REQUIRED_TASKS);
-        for (AcmpTasksRequest request : requestList) {
-            try {
-                driver.navigate().to(AcmpTasksConfig.LINK_PREFIX + request.getAcmpId());
-                final WebElement element = driver.findElement(By.xpath(AcmpTasksConfig.SOLVED_TASKS_LINK));
-                final String tasks = element.getText().replace("\n", "");
+        for (final AcmpTasksRequest request : requestList) {
+            if (request.getAcmpId() != null) {
+                try {
+                    driver.navigate().to(AcmpTasksConfig.LINK_PREFIX + request.getAcmpId());
+                    final WebElement element = driver.findElement(By.xpath(AcmpTasksConfig.SOLVED_TASKS_LINK));
+                    final String tasks = element.getText().replace("\n", "");
 
-                final List<Long> tasksList = Arrays.stream(tasks.split(" "))
-                                                   .filter(t -> !t.isEmpty())
-                                                   .map(Long::parseLong).collect(Collectors.toList());
-                final AcmpVerdict verdict = check(tasksList, requiredTasks);
-                result.add(new AcmpTasksResponse(request.getAcmpId(), tasksList, verdict));
-            } catch (final NoSuchElementException e) {
-                result.add(new AcmpTasksResponse(request.getAcmpId(), Collections.emptyList(),
-                                                 AcmpVerdict.PROFILE_NOT_FOUND));
+                    final List<Long> tasksList = Arrays.stream(tasks.split(" "))
+                            .filter(t -> !t.isEmpty())
+                            .map(Long::parseLong).collect(Collectors.toList());
+                    final AcmpVerdict verdict = check(tasksList, requiredTasks);
+                    result.add(new AcmpTasksResponse(request.getAcmpId(), tasksList, verdict));
+                } catch (final NoSuchElementException e) {
+                    result.add(new AcmpTasksResponse(request.getAcmpId(), Collections.emptyList(),
+                            AcmpVerdict.PROFILE_NOT_FOUND));
+                }
+            } else {
+                result.add(new AcmpTasksResponse(request.getAcmpId(), Collections.emptyList(), AcmpVerdict.TASKS_NOT_SOLVED));
             }
         }
         return result;

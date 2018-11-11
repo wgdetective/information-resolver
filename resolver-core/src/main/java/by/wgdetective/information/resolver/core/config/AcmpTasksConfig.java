@@ -4,7 +4,7 @@ package by.wgdetective.information.resolver.core.config;
  * @author Wladimir Litvinov
  */
 public class AcmpTasksConfig {
-    public static final String INPUT_FIELD_DELIMITER = ",";
+    public static final String INPUT_FIELD_DELIMITER = ";";
     public static final String OUTPUT_FIELD_DELIMITER = ";";
     public static final String LINE_DELIMITER = "\n";
 

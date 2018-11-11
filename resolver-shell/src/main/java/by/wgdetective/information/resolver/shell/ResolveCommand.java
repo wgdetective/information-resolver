@@ -50,7 +50,8 @@ public class ResolveCommand {
         return "Done";
     }
 
-    //resolve-acmp-tasks -i ../../Downloads/Первый\ этап\ курсов\ GP\ (Ответы)\ -\ Ответы\ на\ форму\ (1).csv -o ../acmp_out.csv -r 579,670,278,557
+    //resolve-acmp-tasks -i E:/input.csv -o ../acmp_out.csv -r 579,670,278,557
+    //resolve-acmp-tasks -i ../input.csv -o ../acmp_out.csv -r 579,670,278,557
     @ShellMethod("Resolve solved acmp tasks")
     public String resolveAcmpTasks(@ShellOption(value = {"-i",
                                                          "--inputFile"}, defaultValue = "input.csv") final File inputFile,
