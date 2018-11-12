@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+import static by.wgdetective.information.resolver.core.config.AcmpTasksConfig.OUTPUT_FIELD_DELIMITER;
+
 /**
  * @author Wladimir Litvinov
  */
@@ -17,9 +19,12 @@ public class AcmpTasksResponse implements CsvSerializable {
     private Long acmpId;
     private List<Long> solvedTasks;
     private AcmpVerdict verdict;
+    private int solvedTasksCount;
 
     @Override
     public String toCsv() {
-        return acmpId + AcmpTasksConfig.OUTPUT_FIELD_DELIMITER + verdict.getDescription();
+        return String
+            .format("%d%s%s%s%d", acmpId, OUTPUT_FIELD_DELIMITER, verdict.getDescription(), OUTPUT_FIELD_DELIMITER,
+                    solvedTasksCount);
     }
 }
